@@ -47,12 +47,6 @@ def drawPieces(screen, board):
                 screen.blit(IMAGES[piece], (MARGIN + c * SQ_SIZE, MARGIN + r * SQ_SIZE))
 
 
-# def drawUndoButton(gs):
-#     p.draw.rect(p.display.get_surface(), 'red', p.Rect(0,0,50,50))
-
-
-
-
 """
 Handling User Input and Updating Graphics
 """
@@ -82,19 +76,25 @@ def main():
                 if selectedSQ == (row, col):
                     selectedSQ = ()
                     playerClicks = []
+                elif selectedSQ and  gs.board[row][col][0] == gs.board[selectedSQ[0]][selectedSQ[1]][0]: #The User Changed the selected piece
+                    selectedSQ = (row, col)
+                    playerClicks[0] = selectedSQ
                 else:
                     selectedSQ = (row, col)
                     playerClicks.append(selectedSQ)
-                    print(playerClicks)
                     if len(playerClicks) == 2:
                         move = ChessEngine.Move(playerClicks[0], playerClicks[1], gs.board)
                         print(move.getChessNotation())
                         if move in validMoves:
-                            print("Hello")
                             gs.makeMove(move)
                             moveMade = True
-                        playerClicks = []
-                        selectedSQ = ()
+                            playerClicks = []
+                            selectedSQ = ()
+                        else: 
+                            playerClicks.pop()
+                            selectedSQ = playerClicks[0]
+
+                        
             #Key Handlers
             elif e.type == p.KEYDOWN:
                 if(e.key == p.K_z):
